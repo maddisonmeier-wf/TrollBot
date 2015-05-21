@@ -1,3 +1,5 @@
 webapp2
 webOb 
 paste
+redi
+lxml

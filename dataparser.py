@@ -21,13 +21,21 @@ def three_base_chain(phrases):
     to store into the redis datastore
     """ 
     for phrase in phrases:
-        phrase = (phrase + ' <stop>').split()
+        phrase = (phrase + ' <stop>').lower().split()
         phrase_length = len(phrase)
+        if phrase_length == 2:
+            phrase.append('<stop>')
         for index, word in enumerate(phrase):
-            if index < phrase_length - 2:
+            if index < phrase_length - 2 and phrase_length > 2:
                 phrase_key = (phrase[index], phrase[index+1])
-                if phrase_key in phrase_dict and phrase[index+2] not in phrase_dict[phrase_key]:
-                    phrase_dict[phrase_key] = phrase_dict[phrase_key].append(phrase[index+2])
+                if phrase_key in phrase_dict:
+                    if phrase[index+2] in phrase_dict[phrase_key]:
+                        pass
+                    else:
+                        a = phrase_dict[phrase_key]
+                        b = phrase[index+2]
+                        a.append(b)
+                        phrase_dict[phrase_key] = a
                 else:
                     phrase_dict[phrase_key] = [phrase[index+2]]
 

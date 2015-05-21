@@ -1,13 +1,17 @@
 from lxml import html
 import re
+import redis
 import requests
 
 phrase_dict = {}
 
+def remove_punc(line):
+    return line.replace('-', '').replace('\r', '').replace(',','').replace('\n', '').replace('\t','').replace('.', '!').replace('?','!')
+
 def cleanup(script):
     lines = []
     for line in script:
-        line = line.replace('-', '').replace('\r', '').replace(',','').replace('\n', '').replace('\t','').replace('.', '!').replace('?','!')
+        line = remove_punc(line)
         line_list = re.split('!', line)
         for new in line_list:
             lines.append(new)
@@ -39,24 +43,29 @@ def three_base_chain(phrases):
                 else:
                     phrase_dict[phrase_key] = [phrase[index+2]]
 
+def add_to_redis():
+    redis_conn = redis.Redis()
+    for key, value in phrase_dict.iteritems():
+        for word in value:
+            redis_conn.sadd('-'.join(key), word)
 
 
-with open('trailer_park.txt', 'r') as f:
-    urls = f.readlines()
+def parse_data():
+    with open('trailer_park.txt', 'r') as f:
+        urls = f.readlines()
 
-for url in urls:
-    webpage = requests.get(url)
-    tree = html.fromstring(webpage.text)
+    for url in urls:
+        url = url.replace('\n', '')
+        webpage = requests.get(url)
+        tree = html.fromstring(webpage.text)
 
-    # print webpage.text
+        # print webpage.text
+        script_container = tree.xpath('//div[@class="episode_script"]')
+        script = tree.xpath('//div[@class="scrolling-script-container"]/text()')
+        script = cleanup(script)
 
-    script_container = tree.xpath('//div[@class="episode_script"]')
-    script = tree.xpath('//div[@class="scrolling-script-container"]/text()')
+        three_base_chain(script)
 
-    script = cleanup(script)
 
-    three_base_chain(script)
-
-    print phrase_dict
-
+    add_to_redis()
 

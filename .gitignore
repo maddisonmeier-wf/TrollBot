@@ -28,3 +28,4 @@ deps/lua/src/liblua.a
 *.dSYM
 redis-stable/*
 redisstable
+*.pyc

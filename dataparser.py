@@ -4,11 +4,10 @@ import redis
 import requests
 from app import app
 
+from cli_chat import remove_punc
+
 phrase_dict = {}
 
-def remove_punc(line):
-    line = line.replace('\r', ' ').replace('\n', ' ').replace('\t',' ').replace('"', ' ')
-    return re.sub(r'\(.*?\)', '',  line)
 
 def cleanup(script):
     lines = []

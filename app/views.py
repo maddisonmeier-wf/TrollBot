@@ -13,15 +13,12 @@ def index():
 @app.route('/office_bot', methods=['GET', 'POST'])
 def office_bot():
     
-    new_message = request.args.get('usermsg')
-    
-    if not new_message:
+    if request.method == 'GET':
         return render_template('chat_bot.html',
                                 title='Office Bot',
                                 name='office_bot')
 
-    
 
-    return_message = analyze_input(new_message)
-    app.logger.info(return_message)
+
+    return analyze_input(request.form['text'])
     

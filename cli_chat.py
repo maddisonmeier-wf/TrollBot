@@ -1,10 +1,13 @@
 import random
 import redis
-
-from dataparser import remove_punc
+import re
 
 max_words = 30
 redis_con = redis.Redis()
+
+def remove_punc(line):
+    line = line.replace('\r', ' ').replace('\n', ' ').replace('\t',' ').replace('"', ' ')
+    return re.sub(r'\(.*?\)', '',  line)
 
 def analyze_input(phrase):
     message_tuples = []
@@ -48,10 +51,13 @@ def generate_message(words):
 
     return ' '.join(gen_words)
 
+def chat_client():
+    while True:
+        user_response = raw_input()
+
+        print analyze_input(user_response)
 
 
+if __name__ == "__main__":
+    chat_client()    
 
-while True:
-    user_response = raw_input()
-
-    print analyze_input(user_response)

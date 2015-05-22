@@ -7,6 +7,7 @@ from app import app
 from cli_chat import remove_punc
 
 phrase_dict = {}
+script_files = ['trailer_park.txt', 'office.txt']
 
 
 def cleanup(script):
@@ -47,32 +48,34 @@ def three_base_chain(phrases):
                 else:
                     phrase_dict[phrase_key] = [phrase[index+2]]
 
-def add_to_redis():
-    redis_conn = redis.Redis()
+def add_to_redis(db):
+    redis_conn = redis.Redis(host='localhost', port='6379', db=db)
     for key, value in phrase_dict.iteritems():
         for word in value:
             redis_conn.sadd('-'.join(key), word)
 
 
 def parse_data():
-    app.logger.info("in datapoaser")
-    with open('trailer_park.txt', 'r') as f:
-        urls = f.readlines()
+    for i, script in enumerate(script_files):
+        print "reading " + script
+        with open(script, 'r') as f:
+            urls = f.readlines()
 
-    for url in urls:
-        url = url.replace('\n', '')
-        webpage = requests.get(url)
-        tree = html.fromstring(webpage.text)
+        for url in urls:
+            url = url.replace('\n', '')
+            webpage = requests.get(url)
+            tree = html.fromstring(webpage.text)
 
-        # print webpage.text
-        script_container = tree.xpath('//div[@class="episode_script"]')
-        script = tree.xpath('//div[@class="scrolling-script-container"]/text()')
-        script = cleanup(script)
+            # print webpage.text
+            script_container = tree.xpath('//div[@class="episode_script"]')
+            script = tree.xpath('//div[@class="scrolling-script-container"]/text()')
+            script = cleanup(script)
 
-        three_base_chain(script)
+            print "creating chains"
+            three_base_chain(script)
 
-
-    add_to_redis()
+        print "adding to redis"
+        add_to_redis(i)
 
 if __name__ == '__main__':
     parse_data()

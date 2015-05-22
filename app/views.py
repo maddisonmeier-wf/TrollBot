@@ -2,6 +2,17 @@ from flask import render_template, request
 from app import app
 from cli_chat import analyze_input
 
+def chat_bot_response(name, title, db):
+    if request.method == 'GET':
+        return render_template('chat_bot.html',
+                                title=title,
+                                name=name)
+
+
+
+    return analyze_input(request.form['text'], db)
+
+
 @app.route('/')
 @app.route('/index')
 def index():
@@ -12,13 +23,11 @@ def index():
 
 @app.route('/office_bot', methods=['GET', 'POST'])
 def office_bot():
+    return chat_bot_response('office_bot', 'Office Bot', 1)
+
+@app.route('/trailer_bot', methods=['GET', 'POST'])
+def trailer_bot():
+    return chat_bot_response('trailer_bot', 'Trailer Park Boys Bot', 0)
     
-    if request.method == 'GET':
-        return render_template('chat_bot.html',
-                                title='Office Bot',
-                                name='office_bot')
 
-
-
-    return analyze_input(request.form['text'])
     

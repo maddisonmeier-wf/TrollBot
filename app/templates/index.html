@@ -6,6 +6,7 @@
   <body>
       <h1>Hello, welcome to {{ title }}!</h1>
       <button type="button" id="office_bot">Talk to the office bot</button>
+      <button type="button" id="trailer_bot">Talk to the trailer park boys bot</button>
   </body>
 </html>
 
@@ -13,5 +14,10 @@
     $("#office_bot").click(function()
     {
         window.location.href = '/office_bot';
+    })
+
+    $("#trailer_bot").click(function()
+    {
+        window.location.href = '/trailer_bot';
     })
 </script>

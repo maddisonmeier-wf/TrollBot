@@ -29,5 +29,8 @@ def office_bot():
 def trailer_bot():
     return chat_bot_response('trailer_bot', 'Trailer Park Boys Bot', 0)
     
-
+@app.route('/arrdev_bot', methods=['GET', 'POST'])
+def arrdev_bot():
+    return chat_bot_response('arrdev_bot', 'Arrested Development Bot', 2)
+    
     

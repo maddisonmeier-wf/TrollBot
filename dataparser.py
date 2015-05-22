@@ -7,7 +7,7 @@ from app import app
 from cli_chat import remove_punc
 
 phrase_dict = {}
-script_files = ['trailer_park.txt', 'office.txt']
+script_files = ['trailer_park.txt', 'office.txt', 'arrested_dev.txt']
 
 
 def cleanup(script):

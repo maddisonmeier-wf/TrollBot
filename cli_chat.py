@@ -5,6 +5,7 @@ import re
 max_words = 30
 redis_con_tpb = redis.Redis(host='localhost', port='6379', db=0)
 redis_con_office = redis.Redis(host='localhost', port='6379', db=1)
+redis_con_arrdev = redis.Redis(host='localhost', port='6379', db=2)
 
 def remove_punc(line):
     line = line.replace('\r', ' ').replace('\n', ' ').replace('\t',' ').replace('"', ' ')
@@ -12,7 +13,7 @@ def remove_punc(line):
 
 def analyze_input(phrase, db):
     message_tuples = []
-    phrase = remove_punc(phrase)
+    phrase = remove_punc(phrase.decode('utf-8').strip())
     phrase += ' <stop>'
     words = phrase.split()
     length = len(words)
@@ -23,6 +24,8 @@ def analyze_input(phrase, db):
                 redis_con_tpb.sadd('-'.join([words[i],words[i+1]]), words[i+2])
             elif db ==1:
                 redis_con_office.sadd('-'.join([words[i],words[i+1]]), words[i+2])
+            elif db == 2:
+                redis_con_arrdev.sadd('-'.join([words[i],words[i+1]]), words[i+2])
             message_tuples.append((words[i],words[i+1], words[i+2]))
 
     for words in message_tuples:
@@ -51,6 +54,8 @@ def generate_message(words, db):
             next_word = redis_con_tpb.srandmember('-'.join(words))
         elif db ==1:
             next_word = redis_con_office.srandmember('-'.join(words))
+        elif db == 2:
+            next_word = redis_con_arrdev.srandmember('-'.join(words))
         if not next_word:
             break
 

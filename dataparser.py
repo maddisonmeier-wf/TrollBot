@@ -6,15 +6,18 @@ import requests
 phrase_dict = {}
 
 def remove_punc(line):
-    return line.replace('-', '').replace('\r', '').replace(',','').replace('\n', '').replace('\t','').replace('.', '!').replace('?','!')
+    return line.replace('\r', ' ').replace('\n', ' ').replace('\t',' ').replace('"', ' ')
 
 def cleanup(script):
     lines = []
     for line in script:
         line = remove_punc(line)
-        line_list = re.split('!', line)
+        line_list = re.split('-', line)
         for new in line_list:
-            lines.append(new)
+            if ':' in new or '[' in new:
+                pass
+            else:
+                lines.append(new)
 
     return lines
 
@@ -69,3 +72,5 @@ def parse_data():
 
     add_to_redis()
 
+if __name__ == '__main__':
+    parse_data()

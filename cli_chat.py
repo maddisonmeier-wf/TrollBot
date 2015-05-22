@@ -8,7 +8,7 @@ redis_con = redis.Redis()
 
 def analyze_input(phrase):
     message_tuples = []
-    phrase = remove_punc(phrase).replace('!', '')
+    phrase = remove_punc(phrase)
     phrase += ' <stop>'
     words = phrase.split()
     length = len(words)
@@ -20,7 +20,7 @@ def analyze_input(phrase):
 
     for words in message_tuples:
         longest = ''
-        for i in range(5):
+        for i in range(10):
             gen_message = generate_message([words[0], words[1]])
             if len(gen_message) > len(longest):
                 longest = gen_message

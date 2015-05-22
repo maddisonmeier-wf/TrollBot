@@ -40,7 +40,12 @@ $(document).ready(function(){
         event.preventDefault();
         get_message()
       }
-});
+    });
+
+    $("#exit").click(function()
+    {
+        window.location.href = "/";
+    })
 
 
 
@@ -61,14 +66,14 @@ $(document).ready(function(){
             var clientmessage = $('#usermsg').val();
         
 
-        $("#chatbox").append("<p>("+ get_time()+ "): " + clientmessage +"</p>")
+        $("#chatbox").append("<p><b>("+ get_time()+ ") Me:</b> " + clientmessage +"</p>")
         var url = '/{{ name }}'
         $.ajax({
             url: url,
             data: { text: $("#usermsg").val()},
             type: 'POST',
             success: function(response) {
-            $("#chatbox").append("<p>("+ get_time() + "): " + response +"</p>")
+            $("#chatbox").append("<p><b>("+ get_time() + ") {{ title }}:</b> " + response +"</p>")
         }
         })
 

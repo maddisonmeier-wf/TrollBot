@@ -2,6 +2,7 @@ from lxml import html
 import re
 import redis
 import requests
+from app import app
 
 phrase_dict = {}
 
@@ -55,6 +56,7 @@ def add_to_redis():
 
 
 def parse_data():
+    app.logger.info("in datapoaser")
     with open('trailer_park.txt', 'r') as f:
         urls = f.readlines()
 

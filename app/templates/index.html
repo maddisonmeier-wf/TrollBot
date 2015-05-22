@@ -1,8 +1,17 @@
 <html>
   <head>
-    <title>{{ title }} - microblog</title>
+    <title>{{ title }}</title>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
   </head>
   <body>
-      <h1>Hello, {{ user.nickname }}!</h1>
+      <h1>Hello, welcome to {{ title }}!</h1>
+      <button type="button" id="office_bot">Talk to the office bot</button>
   </body>
 </html>
+
+<script>
+    $("#office_bot").click(function()
+    {
+        window.location.href = '/office_bot';
+    })
+</script>

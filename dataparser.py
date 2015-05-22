@@ -6,7 +6,8 @@ import requests
 phrase_dict = {}
 
 def remove_punc(line):
-    return line.replace('\r', ' ').replace('\n', ' ').replace('\t',' ').replace('"', ' ')
+    line = line.replace('\r', ' ').replace('\n', ' ').replace('\t',' ').replace('"', ' ')
+    return re.sub(r'\(.*?\)', '',  line)
 
 def cleanup(script):
     lines = []
